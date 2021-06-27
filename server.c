@@ -55,6 +55,7 @@ int main(void){
         {
             recv(new_sock_fd, recv_buff, 100, 0); // man recv to see the full list of flags
             printf("%s\n", recv_buff);
+            memset(recv_buff, 0, 100);
         }
         close(new_sock_fd);
 
