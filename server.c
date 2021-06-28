@@ -19,6 +19,7 @@ int main(void){
 
     int server_running = 1;
     int connection_established = 1;
+    int set_option = 1; // used for setsockopt. 1 sets the option specified
 
     struct sockaddr_in serv_addr;
     struct sockaddr_in client_addr;
@@ -26,6 +27,10 @@ int main(void){
     int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
     if(sock_fd == -1){ // socket() returns -1 on failure
         fatal_err("Failed to create socket");
+    }
+
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &set_option, sizeof(int)) == -1){
+        fatal_err("setsockopt failed");
     }
 
     if(inet_aton(ADDR, &serv_addr.sin_addr) != 1){
@@ -56,7 +61,7 @@ int main(void){
         {
             recv(new_sock_fd, recv_buff, 100, 0); // man recv to see the full list of flags
             printf("%s\n", recv_buff);
-            memset(recv_buff, 0, 100);
+            memset(recv_buff, 0, 100); // zero out the recv_buff after handling
         }
         close(new_sock_fd);
 
