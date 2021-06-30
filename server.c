@@ -57,6 +57,7 @@ int main(void){
         if(new_sock_fd == -1){
             fatal_err("Failed to accept incoming connection");
         }
+        printf("[CLIENT CONNECTION] %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
         while (connection_established)
         {
             recv(new_sock_fd, recv_buff, 100, 0); // man recv to see the full list of flags
